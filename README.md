@@ -129,6 +129,7 @@ Please review the [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 * [Caldera](https://caldera.mitre.org/)
 * [Greynoise](https://www.greynoise.io/)
 * [Awesome Threat Hunting](https://github.com/endepointe/awesome-threat-detection)
+* [grpc Namespace Reference](https://grpc.github.io/grpc/cpp/namespacegrpc.html)
 
 ---
 
