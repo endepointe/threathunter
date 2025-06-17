@@ -1,0 +1,28 @@
+// license tbd
+
+// file overview tbd
+
+syntax = "proto3";
+
+package threathunter;
+
+// imports tbd
+
+// file options tbd
+
+message LogEntry {
+  string source = 1;
+  string hostname = 2;
+  string path = 3;
+  int64 timestamp = 4;
+  string content = 5;
+}
+
+service LogStream {
+  rpc SendLog(stream LogEntry) returns (Ack);
+}
+
+message Ack {
+  string message = 1;
+}
+

@@ -1,0 +1,17 @@
+module(name = "threathunter", version = "0.0")
+
+# https://registry.bazel.build
+bazel_dep(name = "grpc", version = "1.72.0")
+bazel_dep(name = "rules_cc", version = "0.1.1")
+bazel_dep(name = "protobuf", version = "31.1")
+bazel_dep(name = "rules_proto", version = "7.1.0")
+bazel_dep(name = "postgres", version = "16.2")
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "rules_proto_grpc_cpp", version = "5.2.0")
+bazel_dep(name = "toolchains_protoc", version = "0.4.2")
+
+protoc = use_extension("@toolchains_protoc//protoc:extensions.bzl", "protoc")
+protoc.toolchain(
+    google_protobuf = "com_google_protobuf",
+    version = "v31.1",
+)
