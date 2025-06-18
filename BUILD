@@ -66,3 +66,33 @@ cc_binary(
     ],
 )
 
+cc_binary(
+    name = "async_client",
+    srcs = ["async_client.cc"],
+    includes = ["/usr/include/math.h","bazel-bin/protos/cpp_grpc_threathunter_proto_pb/protos/"],
+    deps = [
+        ":os_headers",
+        "//protos:cpp_grpc_threathunter_proto",
+        "@com_google_absl//absl/flags:flag",
+        "@com_google_absl//absl/flags:parse",
+        "@com_google_absl//absl/log:initialize",
+        "@grpc//:grpc++",
+        "@grpc//:grpc",
+    ],
+)
+
+cc_binary(
+    name = "async_server",
+    srcs = ["async_server.cc"],
+    includes = ["/usr/include/math.h","bazel-bin/protos/cpp_grpc_threathunter_proto_pb/protos/"],
+    deps = [
+        ":os_headers",
+        "//protos:cpp_grpc_threathunter_proto",
+        "@com_google_absl//absl/flags:flag",
+        "@com_google_absl//absl/flags:parse",
+        "@com_google_absl//absl/log:initialize",
+        "@grpc//:grpc++",
+        "@grpc//:grpc",
+    ],
+)
+
