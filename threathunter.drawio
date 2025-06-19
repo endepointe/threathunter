@@ -1,0 +1,51 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36" version="27.1.6">
+  <diagram name="Page-1" id="a8zvNrl0k5wstkol7_ZN">
+    <mxGraphModel dx="1426" dy="1959" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="V_KrzRb_BU4SWPd25MiN-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="V_KrzRb_BU4SWPd25MiN-1" target="V_KrzRb_BU4SWPd25MiN-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="V_KrzRb_BU4SWPd25MiN-1" value="Silo for Client A" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="140" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="V_KrzRb_BU4SWPd25MiN-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="V_KrzRb_BU4SWPd25MiN-3" target="V_KrzRb_BU4SWPd25MiN-5">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="500" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="V_KrzRb_BU4SWPd25MiN-3" value="Silo for Client B" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="250" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="V_KrzRb_BU4SWPd25MiN-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="V_KrzRb_BU4SWPd25MiN-4" target="V_KrzRb_BU4SWPd25MiN-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="V_KrzRb_BU4SWPd25MiN-4" value="Silo for Client N" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="360" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="V_KrzRb_BU4SWPd25MiN-5" value="&lt;b&gt;Hub&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="560" y="-40" width="900" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="V_KrzRb_BU4SWPd25MiN-11" value="&lt;b&gt;Knowledge Graph&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="950" y="230" width="230" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="V_KrzRb_BU4SWPd25MiN-16" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="600" y="130" width="155" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="V_KrzRb_BU4SWPd25MiN-15" value="&lt;font&gt;&lt;b&gt;Recon Manager&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="V_KrzRb_BU4SWPd25MiN-16">
+          <mxGeometry width="155" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="V_KrzRb_BU4SWPd25MiN-12" value="Recon for Client A" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="V_KrzRb_BU4SWPd25MiN-16">
+          <mxGeometry x="17.5" y="50" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="V_KrzRb_BU4SWPd25MiN-13" value="Recon for Client B" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="V_KrzRb_BU4SWPd25MiN-16">
+          <mxGeometry x="17.5" y="140" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="V_KrzRb_BU4SWPd25MiN-14" value="Recon for Client C" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="V_KrzRb_BU4SWPd25MiN-16">
+          <mxGeometry x="17.5" y="220" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

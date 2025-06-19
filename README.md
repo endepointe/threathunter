@@ -14,6 +14,9 @@ A modular tool for auditing hybrid environments and managing red-blue engagement
 * Generate results of audits and red-blue engagements in pdf or markdown.
 * CLI and Web for audit control and red-blue management.
 
+## Architecture
+```mermaid
+```
 
 ## Tech Stack & Tools
 
@@ -130,6 +133,7 @@ Please review the [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 * [Greynoise](https://www.greynoise.io/)
 * [Awesome Threat Hunting](https://github.com/endepointe/awesome-threat-detection)
 * [grpc Namespace Reference](https://grpc.github.io/grpc/cpp/namespacegrpc.html)
+* [STIX2](https://stix2.readthedocs.io/en/latest/)
 
 ---
 
