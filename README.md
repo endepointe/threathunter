@@ -134,6 +134,7 @@ Please review the [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 * [Awesome Threat Hunting](https://github.com/endepointe/awesome-threat-detection)
 * [grpc Namespace Reference](https://grpc.github.io/grpc/cpp/namespacegrpc.html)
 * [STIX2](https://stix2.readthedocs.io/en/latest/)
+* [MitreAttack Python](https://github.com/mitre-attack/mitreattack-python/)
 
 ---
 
