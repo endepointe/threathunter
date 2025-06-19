@@ -1,4 +1,7 @@
 
 mitreattack-python
 stix2
+stix2-patterns
+taxii2-client
+urllib3
 
