@@ -62,7 +62,7 @@ flowchart LR
 | Cloud/Container | AWS CloudTrail, Azure Monitor (tbd), GCP Logging (tbd), Falco (K8s tbd)       |
 | Frontend        | Some frontend, CLI                    |
 | Automation      | GitHub Actions, Docker, YAML-based pack definitions           |
-| CTI/OSINT      | Abuse.ch, GreyNoise, VirusTotal API, Shodan                   |
+| CTI/OSINT      | Abuse.ch, GreyNoise, VirusTotal API, Shodan, MISP                   |
 | Red Team Sim    | Atomic Red Team, Caldera for penetration testing Silos                |
 | Reports         | Generate reports of CTI and penetration results               |
 
@@ -169,7 +169,7 @@ Please review the [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 * [STIX2](https://stix2.readthedocs.io/en/latest/)
 * [Attack Stix Data](https://github.com/mitre-attack/attack-stix-data/)
 * [MitreAttack Python](https://github.com/mitre-attack/mitreattack-python/)
-
+* [MISP](https://www.misp-project.org/)
 ---
 
 
