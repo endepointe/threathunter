@@ -33,11 +33,19 @@ cc_library(
     }),
     visibility = ["//visibility:public"],
     srcs = glob(
-        include = ["vendor/include/windows/*.cc","vendor/include/linux/*.cc","vendor/include/macos/*.cc"],
+        include = [
+            "vendor/include/windows/*.cc",
+            "vendor/include/linux/*.cc",
+            "vendor/include/macos/*.cc"
+        ],
         allow_empty = True
     ),
     hdrs = glob(
-        include = ["vendor/include/windows/*.h","vendor/include/linux/*.h","vendor/include/macos/*.h"],
+        include = [
+            "vendor/include/windows/*.h",
+            "vendor/include/linux/*.h",
+            "vendor/include/macos/*.h"
+        ],
         allow_empty = True
     )
 )
@@ -45,7 +53,10 @@ cc_library(
 cc_binary(
     name = "client",
     srcs = ["client.cc"],
-    includes = ["/usr/include/math.h","bazel-bin/protos/cpp_grpc_threathunter_proto_pb/protos/"],
+    includes = [
+        "/usr/include/math.h",
+        "bazel-bin/protos/cpp_grpc_threathunter_proto_pb/protos/"
+    ],
     deps = [
         ":os_headers",
         "//protos:cpp_grpc_threathunter_proto",
@@ -57,7 +68,10 @@ cc_binary(
 cc_binary(
     name = "server",
     srcs = ["server.cc"],
-    includes = ["/usr/include/math.h","bazel-bin/protos/cpp_grpc_threathunter_proto_pb/protos/"],
+    includes = [
+        "/usr/include/math.h",
+        "bazel-bin/protos/cpp_grpc_threathunter_proto_pb/protos/"
+    ],
     deps = [
         ":os_headers",
         "//protos:cpp_grpc_threathunter_proto",
@@ -69,7 +83,12 @@ cc_binary(
 cc_binary(
     name = "async_client",
     srcs = ["async_client.cc"],
-    includes = ["/usr/include/math.h","bazel-bin/protos/cpp_grpc_threathunter_proto_pb/protos/"],
+    includes = [
+        "/usr/include/math.h",
+        "/usr/include/pcap/",
+        "bazel-bin/protos/cpp_grpc_threathunter_proto_pb/protos/"
+    ],
+    linkopts = ["-lpcap"],
     deps = [
         ":os_headers",
         "//protos:cpp_grpc_threathunter_proto",
@@ -84,7 +103,10 @@ cc_binary(
 cc_binary(
     name = "async_server",
     srcs = ["async_server.cc"],
-    includes = ["/usr/include/math.h","bazel-bin/protos/cpp_grpc_threathunter_proto_pb/protos/"],
+    includes = [
+        "/usr/include/math.h",
+        "bazel-bin/protos/cpp_grpc_threathunter_proto_pb/protos/"
+    ],
     deps = [
         ":os_headers",
         "//protos:cpp_grpc_threathunter_proto",

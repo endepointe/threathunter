@@ -8,9 +8,11 @@
 #include "absl/log/initialize.h"
 #include "absl/strings/str_format.h"
 
-#include <iostream>
 #include <memory>
-#include <string>
+#include "utils.h"
+#include "sniffer.h"
+#include "recon.h"
+
 
 using grpc::Channel;
 using grpc::ClientContext;
@@ -74,6 +76,13 @@ private:
 int
 main(int argc, char** argv)
 {
+    // testing vendor headers.
+    // TODO: specify what ports to listen to in a config file.
+    //      use bpf filters to check if known malicious ip.
+    //      what other data points can be checked using bpf filtering?
+    get_ip_address("endepointe.com");
+    bpf_filter_and_listen("tcp and port 443");
+    ///////////////////////////////////////////
     absl::ParseCommandLine(argc, argv);
     const std::string target_str("0.0.0.0:50053");
     GreeterClient greeter(grpc::CreateChannel(target_str, grpc::InsecureChannelCredentials()));

@@ -114,9 +114,7 @@ class GreeterServiceImpl final : public Greeter::Service
                     HelloReply* reply) override
     {
         std::string prefix("Hello ");
-        //std::string mood("evaluating emotional status...compiling...done.");
         reply->set_message(prefix + request->name());
-        //reply->set_mood(mood);
         return Status::OK;
     }
 };
