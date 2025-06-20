@@ -84,8 +84,18 @@ main(int argc, char** argv)
     bpf_filter_and_listen("tcp and port 443");
     ///////////////////////////////////////////
     absl::ParseCommandLine(argc, argv);
-    const std::string target_str("0.0.0.0:50053");
-    GreeterClient greeter(grpc::CreateChannel(target_str, grpc::InsecureChannelCredentials()));
+    const std::string target_str("localhost:50053");
+    grpc::SslCredentialsOptions ssl_opts;
+    ssl_opts.pem_root_certs = load_string_from_file("./credentials/root.crt");
+    try {
+        if (ssl_opts.pem_root_certs.empty()) {
+            throw std::runtime_error("empty root.crt file");
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "unable to read " << e.what() << std::endl;
+        throw;
+    }
+    GreeterClient greeter(grpc::CreateChannel(target_str, grpc::SslCredentials(ssl_opts)));
     std::string user("world");
     std::string mood("eq");
     std::string reply = greeter.SayHello(user,mood);

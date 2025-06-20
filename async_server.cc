@@ -8,10 +8,12 @@
 #include "absl/log/initialize.h"
 #include "absl/strings/str_format.h"
 
-#include <iostream>
+#include "utils.h"
+
 #include <memory>
-#include <string>
 #include <thread>
+#include <vector>
+#include <stdexcept>
 
 using grpc::Server;
 using grpc::ServerAsyncResponseWriter;
@@ -31,16 +33,72 @@ public:
         server_->Shutdown();
         cq_->Shutdown();
     }
-    
+   
+    // The port should not change in production, highly unlikely.
+    // ...may remove the port param and just specify a set of ports
+    // that the server can use.
     void Run(uint16_t port) 
     {
-        std::string server_address("0.0.0.0:" + std::to_string(port));
+        std::string server_address("localhost:" + std::to_string(port));
 
         grpc::EnableDefaultHealthCheckService(true);
 
+        std::ifstream file("server_config.toml");
+        if (file.is_open()) {
+            std::string line;
+            bool in_silos = false;
+            while (std::getline(file, line)) {
+                if (!in_silos) {
+                    line.erase(std::remove_if(line.begin(), line.end(), ::isspace), line.end());
+                    if (line.empty()) continue;
+                    if (line[0] == '#') continue;
+                    if (line[0] == ']') break;
+
+                    line.erase(std::remove(line.begin(), line.end(), '"'), line.end());
+                    line.erase(std::remove(line.begin(), line.end(), ','), line.end());
+
+                    allowed_client_ips_.push_back(line);
+                }
+            }
+        } else {
+            throw std::runtime_error("unable to read server_config.toml");
+        }
+
+        for (long unsigned int i = 0; i < allowed_client_ips_.size(); i++) {
+            std::cout << allowed_client_ips_[i]  << std::endl;
+        }
+
+        file.close();
+    
+        grpc::SslServerCredentialsOptions ssl_opts;
+        grpc::SslServerCredentialsOptions::PemKeyCertPair key_cert_pair;
+
+        try {
+            key_cert_pair.private_key = load_string_from_file("./credentials/localhost.key");
+            if (key_cert_pair.private_key.empty()) {
+                throw std::runtime_error("Empty key file");
+            }
+        } catch (const std::exception& e) {
+            std::cerr << "Failed to read private key: " << e.what() << std::endl;
+            throw;
+        }
+
+        try {
+            key_cert_pair.cert_chain = load_string_from_file("./credentials/localhost.crt");
+             if (key_cert_pair.cert_chain.empty()) {
+                throw std::runtime_error("Empty cert file");
+            }
+        } catch (const std::exception& e) {
+            std::cerr << "Failed to read certificate chain: " << e.what() << std::endl;
+            throw;
+        }
+
         ServerBuilder builder;
 
-        builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+        ssl_opts.pem_key_cert_pairs.emplace_back(key_cert_pair);
+
+        builder.AddListeningPort(server_address, grpc::SslServerCredentials(ssl_opts));
+
         builder.RegisterService(&service_);
 
         cq_ = builder.AddCompletionQueue();
@@ -87,7 +145,7 @@ private:
         ServerAsyncResponseWriter<HelloReply> responder_;
         enum CallStatus { CREATE, PROCESS, FINISH };
         CallStatus status_;
-    };
+    }; // end CallData class
 
     void HandleRpcs() 
     {
@@ -99,46 +157,38 @@ private:
             CHECK(ok);
             static_cast<CallData*>(tag)->Proceed();
         }
-    }
-    
+    } // end HandleRpcs fn
+
     std::unique_ptr<ServerCompletionQueue> cq_;
     Greeter::AsyncService service_;
     std::unique_ptr<Server> server_;
+    std::vector<std::string> allowed_client_ips_;
 };
 
-/* // blocking impl 
-class GreeterServiceImpl final : public Greeter::Service 
-{
-    Status SayHello(ServerContext* ctx, 
-                    const HelloRequest* request, 
-                    HelloReply* reply) override
-    {
-        std::string prefix("Hello ");
-        reply->set_message(prefix + request->name());
-        return Status::OK;
-    }
-};
-*/
+/*
+To verify if a server is using TLS from the bash command line, you can use `openssl s_client`.
 
-/* // blocking
-void 
-RunServer(uint16_t port)
-{
-    const std::string server_address("0.0.0.0:" + std::to_string(port));
-    GreeterServiceImpl service;
-    
-    grpc::EnableDefaultHealthCheckService(true);
+```bash
+openssl s_client -connect <host>:<port> -servername <host>
+```
 
-    ServerBuilder builder;
+*   Replace `<host>` with the server's hostname or IP address.
+*   Replace `<port>` with the port number the server is listening on.
+*   The `-servername <host>` option is important for servers that use SNI (Server Name Indication) to host multiple TLS certificates on the same IP address.
 
-    builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
-    builder.RegisterService(&service);
+If the server is using TLS, you'll see output that includes certificate information and the TLS handshake details. If it's not using TLS, the connection will likely fail, or you won't see any certificate information.
 
-    std::unique_ptr<Server> server(builder.BuildAndStart());
-    std::cout << "Async server listening on " << server_address << std::endl;
+To specifically check the negotiated TLS version, you can add the `-ssl3`, `-tls1`, `-tls1_1`, `-tls1_2`, or `-tls1_3` options to force a specific version. If the connection succeeds, the server supports that TLS version. For example:
 
-    server->Wait();
-}
+```bash
+openssl s_client -connect <host>:<port> -servername <host> -tls1_2
+```
+
+If you only want to see the certificate:
+
+```bash
+openssl s_client -showcerts -connect <host>:<port> -servername <host> </dev/null
+```
 */
 
 int
