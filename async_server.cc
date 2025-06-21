@@ -14,6 +14,7 @@
 #include <thread>
 #include <vector>
 #include <stdexcept>
+#include <csignal>
 
 using grpc::Server;
 using grpc::ServerAsyncResponseWriter;
@@ -27,7 +28,7 @@ using threathunter::HelloReply;
 
 class ServerImpl final
 {
-public:
+ public:
     ~ServerImpl() 
     {
         server_->Shutdown();
@@ -107,14 +108,19 @@ public:
 
         std::cout << "Async server listening on " << server_address << std::endl;
 
-        HandleRpcs();
+        HandleRpcs_();
     }
 
-private:
-    class CallData
+    void Shutdown() {
+        server_->Shutdown();
+        cq_->Shutdown();
+    }
+
+ private:
+    class CallData_
     {
      public:
-        CallData(Greeter::AsyncService* service, ServerCompletionQueue* cq)
+        CallData_(Greeter::AsyncService* service, ServerCompletionQueue* cq)
             : service_(service), cq_(cq), responder_(&ctx_), status_(CREATE)
         {
             Proceed();
@@ -126,8 +132,8 @@ private:
                 status_ = PROCESS;
                 service_->RequestSayHello(&ctx_, &request_, &responder_, cq_, cq_, this);
             } else if (status_ == PROCESS) {
-                new CallData(service_, cq_);
-                std::string prefix("Hello ");
+                new CallData_(service_, cq_);
+                std::string prefix("I am your async server. Hello ");
                 reply_.set_message(prefix + request_.name());
                 status_ = FINISH;
                 responder_.Finish(reply_, Status::OK, this);
@@ -143,19 +149,25 @@ private:
         HelloRequest request_;
         HelloReply reply_;
         ServerAsyncResponseWriter<HelloReply> responder_;
-        enum CallStatus { CREATE, PROCESS, FINISH };
-        CallStatus status_;
+        enum CallStatus_ { CREATE, PROCESS, FINISH };
+        CallStatus_ status_;
     }; // end CallData class
 
-    void HandleRpcs() 
+    void HandleRpcs_() 
     {
-        new CallData(&service_, cq_.get());
+        new CallData_(&service_, cq_.get());
         void* tag;
         bool ok;
         while (true){
-            CHECK(cq_->Next(&tag, &ok));
-            CHECK(ok);
-            static_cast<CallData*>(tag)->Proceed();
+            //CHECK(cq_->Next(&tag, &ok));
+            //CHECK(ok);
+            if (!cq_->Next(&tag, &ok)) {
+                break;
+            }
+            if (!ok) {
+                break;
+            }
+            static_cast<CallData_*>(tag)->Proceed();
         }
     } // end HandleRpcs fn
 
@@ -165,41 +177,25 @@ private:
     std::vector<std::string> allowed_client_ips_;
 };
 
-/*
-To verify if a server is using TLS from the bash command line, you can use `openssl s_client`.
-
-```bash
-openssl s_client -connect <host>:<port> -servername <host>
-```
-
-*   Replace `<host>` with the server's hostname or IP address.
-*   Replace `<port>` with the port number the server is listening on.
-*   The `-servername <host>` option is important for servers that use SNI (Server Name Indication) to host multiple TLS certificates on the same IP address.
-
-If the server is using TLS, you'll see output that includes certificate information and the TLS handshake details. If it's not using TLS, the connection will likely fail, or you won't see any certificate information.
-
-To specifically check the negotiated TLS version, you can add the `-ssl3`, `-tls1`, `-tls1_1`, `-tls1_2`, or `-tls1_3` options to force a specific version. If the connection succeeds, the server supports that TLS version. For example:
-
-```bash
-openssl s_client -connect <host>:<port> -servername <host> -tls1_2
-```
-
-If you only want to see the certificate:
-
-```bash
-openssl s_client -showcerts -connect <host>:<port> -servername <host> </dev/null
-```
-*/
+ServerImpl* server_ptr;
+void signal_handler(int signal) 
+{
+    if (server_ptr) {
+        std::cout << "Rcvd signal " << signal << ". Shutting down server.\n";
+        server_ptr->Shutdown();
+    }
+}
 
 int
 main(int argc, char** argv)
 {
-    absl::ParseCommandLine(argc, argv);
-    absl::InitializeLog();
+    //absl::ParseCommandLine(argc, argv);
+    //absl::InitializeLog();
     ServerImpl server;
-
+    signal(SIGINT, signal_handler);
+    signal(SIGTERM, signal_handler);
+    server_ptr = &server;
     server.Run(50053);
-
     return 0;
 }
 
