@@ -3,8 +3,10 @@
 
 #include <string>
 #include <stdio.h>
+#include <stdint.h>
 #include <cstring>
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <sstream>
 
