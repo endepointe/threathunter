@@ -174,6 +174,15 @@ Please review the [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 ---
 
 
+## Install Reqs (TODO)
+```bash
+#linux
+libpcap
+build-essential
+g++
+bazel
+```
+
 ## 🛡️ License
 
 MIT License © 2025 EndePointe / ThreatHunter Team

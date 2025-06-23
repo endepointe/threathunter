@@ -60,13 +60,13 @@ class GreeterClient
 
         /////////////////////////////////////////////////
         // using AsyncClientCall_ to process client data.
+        /*
         HelloReply reply;
 
         ClientContext context;
 
         CompletionQueue cq;
     
-        // async
         Status status;// = stub_->SayHello(&context, request, &reply);
 
         std::unique_ptr<ClientAsyncResponseReader<HelloReply>> rpc(
@@ -145,6 +145,8 @@ main(int argc, char** argv)
     //std::string user("world!");
     //std::string reply = greeter.SayHello(user);
     //std::cout << "Client rcvd: " << reply << std::endl;
-    greeter.StartReading();
+    //greeter.StartReading();
+    Sniffer sniffer;
+    sniffer.filter_and_listen();
     return 0;
 }

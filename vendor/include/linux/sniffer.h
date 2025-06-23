@@ -42,6 +42,29 @@ struct IpHeader {
     uint32_t daddr;
 };
 
+class Sniffer {
+ public:
+    Sniffer() : filter_exp_("tcp and port 80") {}
+    Sniffer(const std::string& exp) : filter_exp_(exp) {}
+    ~Sniffer() {
+        //if (eth_header_) delete eth_header_;
+        //if (ip_header_) delete ip_header_;
+        //if (alldevs_) {pcap_freealldevs(alldevs_);}
+        //if (handle_) {pcap_close(handle_);}
+        //if (bpf_filter_) {pcap_freecode(&bpf_filter_);}
+    }
+    std::string get_exp();
+    int filter_and_listen();
+    int filter_and_listen(const std::string&);
+ private:
+    static void _handle_packets(u_char*, const struct pcap_pkthdr*, const u_char*);
+    std::string filter_exp_;
+    //EthernetHeader* eth_header_ = nullptr; // TODO: make this a shared_ptr
+    //IpHeader* ip_header_ = nullptr; // TODO: read about reinterpret_cast<T>
+    //pcap_if_t* alldevs_ = nullptr;
+    //pcap_t* handle_ = nullptr;
+    //struct bpf_program bpf_filter_;
+};
 
 int bpf_filter_and_listen(const std::string&);
 
