@@ -1,18 +1,17 @@
 # ThreatHunter
 
-A modular tool for auditing hybrid environments.
-
+Assume You Are Comprimised.
 
 ## Overview
 
-**ThreatHunter** is an open-source framework designed for on-prem and cloud environments. 
+**ThreatHunter** is a shell environment framework designed for on-prem and cloud environments.
 
-* Continuously ingests logs, cloud events, telemetry, and container behavior from multiple clients, called Silos.
-* Correlates activity against **MITRE TTPs** using a knowledge graph in a central Hub.
-* Uses **recon**: curated detection queries.
+* Ingests logs as needed, cloud events, telemetry, and container behavior from multiple clients, called Silos.
+* Correlate activity against **MITRE TTPs** using a knowledge graph in a central Hub.
+* Use **Recon**: curated detection queries.
 * Integrates with **OSINT feeds**, **CTI platforms**, and **Sigma rules** for threat-analysis.
 * Generate reports of a Silos activity.
-* Terminal and Web interfaces for framework management.
+* Terminal interface for framework management, called 'threatshell'.
 
 ## Architecture
 ```mermaid
@@ -34,8 +33,7 @@ flowchart LR
     end
     subgraph Hunter_Interface
         direction RL
-        Web
-        Terminal
+        threatshell
     end
     subgraph Red_Team
         direction LR
@@ -58,9 +56,8 @@ flowchart LR
 | ------------------ | ------------------------------------------------------------- |
 | Detection Logic | MITRE ATT\&CK, Sigma rules, STIX                  |
 | Programming     | C++ gRPC for high-performance collection, raw and pcap traffic capture    |
-| Query Support   | KQL (Azure tbd), SQL (PostgreSQL), SPL (Splunk tbd)      |
-| Cloud/Container | AWS CloudTrail, Azure Monitor (tbd), GCP Logging (tbd), Falco (K8s tbd)       |
-| Frontend        | Some frontend, CLI                    |
+| Query Support   | KQL (Azure tbd), SQL (PostgreSQL)  |
+| Cloud/Container | Azure Monitor (tbd)    |
 | Automation      | GitHub Actions, Docker, YAML-based pack definitions           |
 | CTI/OSINT      | Abuse.ch, GreyNoise, VirusTotal API, Shodan, MISP                   |
 | Red Team Sim    | Atomic Red Team, Caldera for penetration testing Silos                |

@@ -1,5 +1,5 @@
-#ifndef SNIFFER_H 
-#define SNIFFER_H
+#ifndef SILO_H 
+#define SILO_H
 
 // Resources:
 // TCPIP Tut https://datatracker.ietf.org/doc/rfc1180/ 
@@ -14,6 +14,7 @@
 #include <netinet/ip.h>
 #include <netinet/ip6.h>
 #include <net/ethernet.h>
+#include "data_collector.h"
 
 struct EthernetHeader {
     uint8_t dest_eth_addr[ETH_ALEN];
@@ -42,28 +43,24 @@ struct IpHeader {
     uint32_t daddr;
 };
 
-class Sniffer {
+class Silo {
  public:
-    Sniffer() : filter_exp_("tcp and port 80") {}
-    Sniffer(const std::string& exp) : filter_exp_(exp) {}
-    ~Sniffer() {
-        //if (eth_header_) delete eth_header_;
-        //if (ip_header_) delete ip_header_;
-        //if (alldevs_) {pcap_freealldevs(alldevs_);}
-        //if (handle_) {pcap_close(handle_);}
-        //if (bpf_filter_) {pcap_freecode(&bpf_filter_);}
-    }
-    std::string get_exp();
+    Silo() : filter_exp_("tcp and port 80"), 
+                bucket_of_ips_(std::make_shared<std::unordered_set<std::string>>()) {}
+    Silo(const std::string& exp) : filter_exp_(exp), 
+                bucket_of_ips_(std::make_shared<std::unordered_set<std::string>>()) {}
+    ~Silo() {}
     int filter_and_listen();
     int filter_and_listen(const std::string&);
+    bool bucket_contains(const std::string&);
+    //DataCollector* data_collector_;
+
  private:
     static void _handle_packets(u_char*, const struct pcap_pkthdr*, const u_char*);
+    void _add_ip(const std::string&);
     std::string filter_exp_;
-    //EthernetHeader* eth_header_ = nullptr; // TODO: make this a shared_ptr
-    //IpHeader* ip_header_ = nullptr; // TODO: read about reinterpret_cast<T>
-    //pcap_if_t* alldevs_ = nullptr;
-    //pcap_t* handle_ = nullptr;
-    //struct bpf_program bpf_filter_;
+    std::shared_ptr<std::unordered_set<std::string>> bucket_of_ips_;
+    std::mutex mutex_;
 };
 
 int bpf_filter_and_listen(const std::string&);

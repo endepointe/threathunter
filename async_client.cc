@@ -8,11 +8,8 @@
 #include "absl/log/initialize.h"
 #include "absl/strings/str_format.h"
 
-#include <memory>
-#include <thread>
 #include "utils.h"
-#include "sniffer.h"
-#include "recon.h"
+#include "silo.h"
 
 
 using grpc::Channel;
@@ -60,40 +57,38 @@ class GreeterClient
 
         /////////////////////////////////////////////////
         // using AsyncClientCall_ to process client data.
-        /*
-        HelloReply reply;
+        //HelloReply reply;
 
-        ClientContext context;
+        //ClientContext context;
 
-        CompletionQueue cq;
+        //CompletionQueue cq;
     
-        Status status;// = stub_->SayHello(&context, request, &reply);
+        //Status status;// = stub_->SayHello(&context, request, &reply);
 
-        std::unique_ptr<ClientAsyncResponseReader<HelloReply>> rpc(
-                stub_->AsyncSayHello(&context, request, &cq));
+        //std::unique_ptr<ClientAsyncResponseReader<HelloReply>> rpc(
+        //        stub_->AsyncSayHello(&context, request, &cq));
 
-        rpc->Finish(&reply, &status, (void*)1);
+        //rpc->Finish(&reply, &status, (void*)1);
 
-        void* got_tag;
-        bool ok = false; 
+        //void* got_tag;
+        //bool ok = false; 
 
-        //block until result is available in cq.
-        CHECK(cq.Next(&got_tag, &ok));
-        //verify that it corresponds to previous request
-        CHECK_EQ(got_tag, (void*)1);
-        //is completed successfully
-        CHECK(ok);
+        ////block until result is available in cq.
+        //CHECK(cq.Next(&got_tag, &ok));
+        ////verify that it corresponds to previous request
+        //CHECK_EQ(got_tag, (void*)1);
+        ////is completed successfully
+        //CHECK(ok);
 
-        if (status.ok()) {
-            return reply.message();
-        } else {
-            std::cout 
-                << status.error_code() 
-                << ": " 
-                << status.error_message() << std::endl;
-            return "RPC failed..";
-        }
-        */
+        //if (status.ok()) {
+        //    return reply.message();
+        //} else {
+        //    std::cout 
+        //        << status.error_code() 
+        //        << ": " 
+        //        << status.error_message() << std::endl;
+        //    return "RPC failed..";
+        //}
         ///////////////////////////////////////////////
     }
 
@@ -146,7 +141,7 @@ main(int argc, char** argv)
     //std::string reply = greeter.SayHello(user);
     //std::cout << "Client rcvd: " << reply << std::endl;
     //greeter.StartReading();
-    Sniffer sniffer;
-    sniffer.filter_and_listen();
+    Silo silo;
+    silo.filter_and_listen();
     return 0;
 }
