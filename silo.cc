@@ -9,7 +9,7 @@
 #include "absl/strings/str_format.h"
 
 #include "utils.h"
-#include "silo.h"
+#include "silo_helper.h"
 
 
 using grpc::Channel;

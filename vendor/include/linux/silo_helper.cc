@@ -2,7 +2,7 @@
 // TODO:
 //  create a logging function that moves stdout and stderr 
 //  messages to status.log and error.log.
-#include "silo.h"
+#include "silo_helper.h"
 
 
 

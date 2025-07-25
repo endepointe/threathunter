@@ -51,41 +51,11 @@ cc_library(
 )
 
 cc_binary(
-    name = "client",
-    srcs = ["client.cc"],
+    name = "silo",
+    srcs = ["silo.cc"],
     includes = [
         "/usr/include/math.h",
-        "bazel-bin/protos/cpp_grpc_threathunter_proto_pb/protos/"
-    ],
-    deps = [
-        ":os_headers",
-        "//protos:cpp_grpc_threathunter_proto",
-        "@grpc//:grpc++",
-        "@grpc//:grpc",
-    ],
-)
-
-cc_binary(
-    name = "server",
-    srcs = ["server.cc"],
-    includes = [
-        "/usr/include/math.h",
-        "bazel-bin/protos/cpp_grpc_threathunter_proto_pb/protos/"
-    ],
-    deps = [
-        ":os_headers",
-        "//protos:cpp_grpc_threathunter_proto",
-        "@grpc//:grpc++",
-        "@grpc//:grpc",
-    ],
-)
-
-cc_binary(
-    name = "async_client",
-    srcs = ["async_client.cc"],
-    includes = [
-        "/usr/include/math.h",
-        "/usr/include/pcap/",
+        "/usr/include/pcap/", # build header file into binary instead of making it system dependent.
         "bazel-bin/protos/cpp_grpc_threathunter_proto_pb/protos/"
     ],
     linkopts = ["-lpcap"],
@@ -101,8 +71,8 @@ cc_binary(
 )
 
 cc_binary(
-    name = "async_server",
-    srcs = ["async_server.cc"],
+    name = "recon_manager",
+    srcs = ["recon_manager.cc"],
     includes = [
         "/usr/include/math.h",
         "bazel-bin/protos/cpp_grpc_threathunter_proto_pb/protos/"
