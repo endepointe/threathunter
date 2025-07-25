@@ -51,8 +51,8 @@ cc_library(
 )
 
 cc_binary(
-    name = "silo",
-    srcs = ["silo.cc"],
+    name = "client",
+    srcs = ["client.cc"],
     includes = [
         "/usr/include/math.h",
         "/usr/include/pcap/", # build header file into binary instead of making it system dependent.
@@ -71,8 +71,8 @@ cc_binary(
 )
 
 cc_binary(
-    name = "recon_manager",
-    srcs = ["recon_manager.cc"],
+    name = "server",
+    srcs = ["server.cc"],
     includes = [
         "/usr/include/math.h",
         "bazel-bin/protos/cpp_grpc_threathunter_proto_pb/protos/"

@@ -22,9 +22,7 @@ service LogStream {
   rpc SendLog(stream LogEntry) returns (Ack);
 }
 
-message Ack {
-  string message = 1;
-}
+
 
 ///////////////////////////////////
 service Greeter {
@@ -38,5 +36,45 @@ message HelloRequest {
 }
 
 message HelloReply {
+  string message = 1;
+}
+
+
+//////////////////////
+service ThreatHunter {
+  rpc SendSystemSnapshot (SnapshotRequest) returns (ScanResult);
+  rpc GetHuntInstructions (ClientInfo) returns (HuntInstruction);
+  rpc StreamAnomalies (stream AnomalyReport) returns (Ack);
+}
+
+message SnapshotRequest {
+  string hostname = 1;
+  string os = 2;
+  repeated string running_processes = 3;
+  repeated string network_connections = 4;
+}
+
+message ScanResult {
+  bool threat_detected = 1;
+  string summary = 2;
+}
+
+message ClientInfo {
+  string hostname = 1;
+  string ip = 2;
+}
+
+message HuntInstruction {
+  repeated string yara_rules = 1;
+  string command = 2;
+}
+
+message AnomalyReport {
+  string type = 1;
+  string description = 2;
+  string timestamp = 3;
+}
+
+message Ack {
   string message = 1;
 }
