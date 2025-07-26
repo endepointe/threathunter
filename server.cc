@@ -54,7 +54,16 @@ class ThreatHunterServiceImpl final : public ThreatHunter::Service
 int
 main(void) 
 {
-    std::cout << "hello from server.cc\n";
+    std::cout << "Starting ThreatHuntingHub\n";
+    std::string address = "0.0.0.0:50017";
+    ThreatHunterServiceImpl service;
+    ServerBuilder builder;
+    builder.AddListeningPort(address, grpc::InsecureServerCredentials());
+    builder.RegisterService(&service);
+    std::unique_ptr<Server> server(builder.BuildAndStart());
+    std::cout << "ThreatHuntingHub running at 0.0.0.0:50017.\n";
+    server->Wait();
+
     return 0;
 }
 
