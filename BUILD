@@ -23,7 +23,6 @@ config_setting(
     ],
 )
 
-# Library containing platform-specific headers
 cc_library(
     name = "os_headers",
     includes = select({
@@ -43,7 +42,6 @@ cc_library(
     ),
 )
 
-# Client binary
 cc_binary(
     name = "client",
     linkopts = ["-lpcap"],
@@ -57,8 +55,8 @@ cc_binary(
     ],
     srcs = select({
         ":linux": ["client.cc", "vendor/include/linux/linux_monitor.cc"],
-        ":windows": ["client.cc", "vendor/include/windows/monitor.cc"],
-        ":macos": ["client.cc", "vendor/include/macos/monitor.cc"],  # macOS-specific source files
+        ":windows": ["client.cc", "vendor/include/windows/windows_monitor.cc"],
+        ":macos": ["client.cc", "vendor/include/macos/macos_monitor.cc"],  # macOS-specific source files
         "//conditions:default": ["client.cc"],
     }),
     includes = select({
@@ -69,7 +67,6 @@ cc_binary(
     }),
 )
 
-# Server binary
 cc_binary(
     name = "server",
     srcs = ["server.cc"],

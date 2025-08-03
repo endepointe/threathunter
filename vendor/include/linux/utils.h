@@ -18,6 +18,7 @@
 #include <unordered_set>
 #include <sys/sysinfo.h>
 #include <random>
+#include <vector>
 
 void about(void);
 

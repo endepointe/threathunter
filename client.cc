@@ -3,10 +3,11 @@
 #include <grpcpp/grpcpp.h>
 
 #ifdef __linux__
-//#include "linux/utils.h"
+#include "utils.h"
 #include "linux_monitor.h"
+#include "shell.h"
 #elif _WIN32
-//#include "windows/monitor.cc"
+#include "windows_monitor.cc"
 #endif
 #include <string>
 #include <iostream>
@@ -50,16 +51,18 @@ class ThreatHunterClient
     std::unique_ptr<ThreatHunter::Stub> stub_;
 };
 
+
+
+
 int
 main(void) 
 {
+    std::cout << test() << std::endl;
     hello("ep");
-    /*
     ThreatHunterClient hunter(grpc::CreateChannel("0.0.0.0:50017", grpc::InsecureChannelCredentials()));
     std::string data("hello");
     std::string reply = hunter.send_snapshot(data);
     std::cout << "Hunter received: " << reply << std::endl;
-    */
     return 0;
 }
 
