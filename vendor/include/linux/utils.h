@@ -12,6 +12,8 @@
 #include <sstream>
 #include <memory>
 #include <mutex>
+#include <atomic>
+#include <chrono>
 #include <thread>
 #include <unordered_set>
 #include <sys/sysinfo.h>

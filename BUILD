@@ -23,41 +23,29 @@ config_setting(
     ],
 )
 
+# Library containing platform-specific headers
 cc_library(
     name = "os_headers",
     includes = select({
         ":windows": ["vendor/include/windows"],
         ":linux": ["vendor/include/linux"],
         ":macos": ["vendor/include/macos"],
-        "//conditions:default": [],
+        "//conditions:default": [],  # Default for unsupported platforms
     }),
     visibility = ["//visibility:public"],
-    srcs = glob(
-        include = [
-            "vendor/include/windows/*.cc",
-            "vendor/include/linux/*.cc",
-            "vendor/include/macos/*.cc"
-        ],
-        allow_empty = True
-    ),
     hdrs = glob(
         include = [
             "vendor/include/windows/*.h",
             "vendor/include/linux/*.h",
-            "vendor/include/macos/*.h"
+            "vendor/include/macos/*.h",
         ],
-        allow_empty = True
-    )
+        allow_empty = True,
+    ),
 )
 
+# Client binary
 cc_binary(
     name = "client",
-    srcs = ["client.cc"],
-    includes = [
-        "/usr/include/math.h",
-        "/usr/include/pcap/", # build header file into binary instead of making it system dependent.
-        "bazel-bin/protos/cpp_grpc_threathunter_proto_pb/protos/"
-    ],
     linkopts = ["-lpcap"],
     deps = [
         ":os_headers",
@@ -66,16 +54,27 @@ cc_binary(
         "@com_google_absl//absl/flags:parse",
         "@com_google_absl//absl/log:initialize",
         "@grpc//:grpc++",
-        "@grpc//:grpc",
     ],
+    srcs = select({
+        ":linux": ["client.cc", "vendor/include/linux/linux_monitor.cc"],
+        ":windows": ["client.cc", "vendor/include/windows/monitor.cc"],
+        ":macos": ["client.cc", "vendor/include/macos/monitor.cc"],  # macOS-specific source files
+        "//conditions:default": ["client.cc"],
+    }),
+    includes = select({
+        ":linux": ["protos/cpp_grpc_threathunter_proto_pb/protos", "vendor/include/linux"],
+        ":windows": ["protos/cpp_grpc_threathunter_proto_pb/protos", "vendor/include/windows"],
+        ":macos": ["protos/cpp_grpc_threathunter_proto_pb/protos", "vendor/include/macos"],  # macOS-specific includes
+        "//conditions:default": ["protos/cpp_grpc_threathunter_proto_pb/protos"],
+    }),
 )
 
+# Server binary
 cc_binary(
     name = "server",
     srcs = ["server.cc"],
     includes = [
-        "/usr/include/math.h",
-        "bazel-bin/protos/cpp_grpc_threathunter_proto_pb/protos/"
+        "protos/cpp_grpc_threathunter_proto_pb/protos",  # Relative path for protos
     ],
     deps = [
         ":os_headers",
@@ -84,7 +83,6 @@ cc_binary(
         "@com_google_absl//absl/flags:parse",
         "@com_google_absl//absl/log:initialize",
         "@grpc//:grpc++",
-        "@grpc//:grpc",
     ],
 )
 
