@@ -2,6 +2,10 @@
 #include "protos/threathunter.grpc.pb.h"
 #include <grpcpp/grpcpp.h>
 
+// I would like to use the same header file names for both windows
+// and linux systems but whether this is best practice is up in the
+// air. I could spend a morning on a day off doing some housework
+// on this project, cleaning up the BUILD file and project structure.
 #ifdef __linux__
 #include "utils.h"
 #include "linux_monitor.h"
@@ -59,10 +63,17 @@ main(void)
 {
     std::cout << test() << std::endl;
     hello("ep");
+    /*
     ThreatHunterClient hunter(grpc::CreateChannel("0.0.0.0:50017", grpc::InsecureChannelCredentials()));
     std::string data("hello");
     std::string reply = hunter.send_snapshot(data);
     std::cout << "Hunter received: " << reply << std::endl;
+    */
+    auto channel = grpc::CreateChannel("0.0.0.0:50017", grpc::InsecureChannelCredentials());
+    auto stub = ThreatHunter::NewStub(channel);
+
+    run_shell(stub);
+
     return 0;
 }
 
